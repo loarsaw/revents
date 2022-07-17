@@ -45,10 +45,11 @@ class EventListItem extends Component {
           <Text fontSize={"15px"}>{event.venue}</Text>
         </Stack>
         <Divider />
-        <Wrap my={2}>
-          {event.attendees.map((attendee) => (
-            <EventListAttendee key={attendee.id} attendee={attendee} />
-          ))}
+        <Wrap my={2} minH={10}>
+          {event.attendees &&
+            event.attendees.map((attendee) => (
+              <EventListAttendee key={attendee.id} attendee={attendee} />
+            ))}
         </Wrap>
 
         <Divider />

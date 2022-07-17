@@ -10,18 +10,19 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-const EventForm = ({ handleCancel }) => {
+const EventForm = ({ createEvent, handleCancel }) => {
   const [formData, setFormData] = useState({
-    eventTitle: "",
-    eventDate: "",
-    eventVenue: "",
-    eventCity: "",
+    title: "",
+    date: "",
+    venue: "",
+    city: "",
     hostedBy: "",
   });
 
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  const onSubmit = (evt) => {
+    evt.preventDefault();
+    createEvent(formData);
+  };
 
   const updateFormData = (event) =>
     setFormData({
@@ -29,7 +30,7 @@ const EventForm = ({ handleCancel }) => {
       [event.target.name]: event.target.value,
     });
 
-  const { eventTitle, eventCity, eventDate, eventVenue, hostedBy } = formData;
+  const { title, city, date, venue, hostedBy } = formData;
   return (
     <Flex
       minH={"100vh"}
@@ -51,10 +52,10 @@ const EventForm = ({ handleCancel }) => {
           <FormControl isRequired>
             <FormLabel>Event Name</FormLabel>
             <Input
-              value={eventTitle}
+              value={title}
               onChange={(e) => updateFormData(e)}
               placeholder="Event Name"
-              name="eventTitle"
+              name="title"
               _placeholder={{ color: "gray.500" }}
               type="text"
             />
@@ -65,9 +66,9 @@ const EventForm = ({ handleCancel }) => {
               placeholder="The Date of your Event"
               _placeholder={{ color: "gray.500" }}
               type="datetime-local"
-              name="eventDate"
+              name="date"
               onChange={(e) => updateFormData(e)}
-              value={eventDate}
+              value={date}
             />
           </FormControl>
           <FormControl isRequired>
@@ -76,8 +77,8 @@ const EventForm = ({ handleCancel }) => {
               placeholder="City Event is taking Place"
               _placeholder={{ color: "gray.500" }}
               onChange={(e) => updateFormData(e)}
-              name="eventCity"
-              value={eventCity}
+              name="city"
+              value={city}
               type="text"
             />
           </FormControl>
@@ -87,8 +88,8 @@ const EventForm = ({ handleCancel }) => {
               placeholder="Venue of Event"
               _placeholder={{ color: "gray.500" }}
               onChange={(e) => updateFormData(e)}
-              name="eventVenue"
-              value={eventVenue}
+              name="venue"
+              value={venue}
               type="text"
             />
           </FormControl>
@@ -124,7 +125,7 @@ const EventForm = ({ handleCancel }) => {
             _hover={{
               bg: "blue.500",
             }}
-            // onClick={onSubmit}
+            onClick={onSubmit}
           >
             Submit
           </Button>
