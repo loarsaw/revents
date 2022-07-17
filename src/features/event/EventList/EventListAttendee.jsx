@@ -1,4 +1,4 @@
-import { Avatar, Wrap, WrapItem } from "@chakra-ui/react";
+import { Avatar, WrapItem } from "@chakra-ui/react";
 
 import React from "react";
 

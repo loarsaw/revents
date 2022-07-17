@@ -1,43 +1,3 @@
-// import React, { Component } from 'react';
-// import { Segment, Form, Button } from 'semantic-ui-react';
-
-// class EventForm extends Component {
-//   render() {
-//     const {handleCancel} = this.props;
-//     return (
-//       <Segment>
-//         <Form>
-//           <Form.Field>
-//             <label>Event Title</label>
-//             <input placeholder="First Name" /
-//           </Form.Field>
-//           <Form.Field>
-//             <label>Event Date</label>
-//             <input type="date" placeholder="Event Date" />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>City</label>
-//             <input placeholder="City event is taking place" />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>Venue</label>
-//             <input placeholder="Enter the Venue of the event" />
-//           </Form.Field>
-//           <Form.Field>
-//             <label>Hosted By</label>
-//             <input placeholder="Enter the name of person hosting" />
-//           </Form.Field>
-//           <Button positive type="submit">
-//             Submit
-//           </Button>
-//           <Button onClick={handleCancel} type="button">Cancel</Button>
-//         </Form>
-//       </Segment>
-//     );
-//   }
-// }
-
-// export default EventForm;
 import {
   Button,
   Flex,
@@ -47,15 +7,29 @@ import {
   Input,
   Stack,
   useColorModeValue,
-  HStack,
-  Avatar,
-  AvatarBadge,
-  IconButton,
-  Center,
 } from "@chakra-ui/react";
-import { SmallCloseIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
 
-export default function UserProfileEdit({ handleCancel }) {
+const EventForm = ({ handleCancel }) => {
+  const [formData, setFormData] = useState({
+    eventTitle: "",
+    eventDate: "",
+    eventVenue: "",
+    eventCity: "",
+    hostedBy: "",
+  });
+
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
+  const updateFormData = (event) =>
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+
+  const { eventTitle, eventCity, eventDate, eventVenue, hostedBy } = formData;
   return (
     <Flex
       minH={"100vh"}
@@ -73,54 +47,64 @@ export default function UserProfileEdit({ handleCancel }) {
         p={6}
         my={12}
       >
-        <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
-          User Profile Edit
-        </Heading>
-        <FormControl id="userName">
-          <FormLabel>User Icon</FormLabel>
-          <Stack direction={["column", "row"]} spacing={6}>
-            <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
-                <AvatarBadge
-                  as={IconButton}
-                  size="sm"
-                  rounded="full"
-                  top="-10px"
-                  colorScheme="red"
-                  aria-label="remove Image"
-                  icon={<SmallCloseIcon />}
-                />
-              </Avatar>
-            </Center>
-            <Center w="full">
-              <Button w="full">Change Icon</Button>
-            </Center>
-          </Stack>
-        </FormControl>
-        <FormControl id="userName" isRequired>
-          <FormLabel>User name</FormLabel>
-          <Input
-            placeholder="UserName"
-            _placeholder={{ color: "gray.500" }}
-            type="text"
-          />
-        </FormControl>
-        <FormControl id="email" isRequired>
-          <FormLabel>Email address</FormLabel>
-          <Input
-            placeholder="your-email@example.com"
-            _placeholder={{ color: "gray.500" }}
-            type="email"
-          />
-        </FormControl>
-        <FormControl id="password" isRequired>
-          <FormLabel>Password</FormLabel>
-          <Input
-            placeholder="password"
-            _placeholder={{ color: "gray.500" }}
-            type="password"
-          />
-        </FormControl>
+        <form>
+          <FormControl isRequired>
+            <FormLabel>Event Name</FormLabel>
+            <Input
+              value={eventTitle}
+              onChange={(e) => updateFormData(e)}
+              placeholder="Event Name"
+              name="eventTitle"
+              _placeholder={{ color: "gray.500" }}
+              type="text"
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Event Date</FormLabel>
+            <Input
+              placeholder="The Date of your Event"
+              _placeholder={{ color: "gray.500" }}
+              type="datetime-local"
+              name="eventDate"
+              onChange={(e) => updateFormData(e)}
+              value={eventDate}
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>City</FormLabel>
+            <Input
+              placeholder="City Event is taking Place"
+              _placeholder={{ color: "gray.500" }}
+              onChange={(e) => updateFormData(e)}
+              name="eventCity"
+              value={eventCity}
+              type="text"
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Venue</FormLabel>
+            <Input
+              placeholder="Venue of Event"
+              _placeholder={{ color: "gray.500" }}
+              onChange={(e) => updateFormData(e)}
+              name="eventVenue"
+              value={eventVenue}
+              type="text"
+            />
+          </FormControl>
+          <FormControl isRequired>
+            <FormLabel>Hosted By </FormLabel>
+            <Input
+              placeholder="Enter the name of person hosting it"
+              _placeholder={{ color: "gray.500" }}
+              onChange={(e) => updateFormData(e)}
+              value={hostedBy}
+              name="hostedBy"
+              type="text"
+            />
+          </FormControl>
+        </form>
+
         <Stack spacing={6} direction={["column", "row"]}>
           <Button
             bg={"red.400"}
@@ -140,6 +124,7 @@ export default function UserProfileEdit({ handleCancel }) {
             _hover={{
               bg: "blue.500",
             }}
+            // onClick={onSubmit}
           >
             Submit
           </Button>
@@ -147,4 +132,6 @@ export default function UserProfileEdit({ handleCancel }) {
       </Stack>
     </Flex>
   );
-}
+};
+
+export default EventForm;
