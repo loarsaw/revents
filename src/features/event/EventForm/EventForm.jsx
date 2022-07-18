@@ -10,18 +10,37 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
-const EventForm = ({ createEvent, handleCancel }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    date: "",
-    venue: "",
-    city: "",
-    hostedBy: "",
-  });
+const emptyEvent = {
+  title: "",
+  date: "",
+  venue: "",
+  city: "",
+  hostedBy: "",
+};
+
+const EventForm = ({
+  createEvent,
+  handleCancel,
+  selectedEvent,
+  updateEvent,
+}) => {
+  const [formData, setFormData] = useState(emptyEvent);
+
+  useEffect(() => {
+    if (selectedEvent !== null) {
+      setFormData(selectedEvent);
+    } else {
+      setFormData(emptyEvent);
+    }
+  }, [selectedEvent]);
 
   const onSubmit = (evt) => {
     evt.preventDefault();
-    createEvent(formData);
+    if (selectedEvent !== null) {
+      updateEvent(formData);
+    } else {
+      createEvent(formData);
+    }
   };
 
   const updateFormData = (event) =>

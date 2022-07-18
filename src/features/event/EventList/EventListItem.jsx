@@ -18,7 +18,7 @@ import EventListAttendee from "./EventListAttendee";
 
 class EventListItem extends Component {
   render() {
-    const { event } = this.props;
+    const { event, onEventOpen, deleteEvent } = this.props;
     return (
       <Box
         p={4}
@@ -61,11 +61,12 @@ class EventListItem extends Component {
             non cillum non cupidatat laboris laboris duis eu fugiat in dolore.
             Ex voluptate ex velit sint quis.
           </Text>
-          <Button>View</Button>
+          <Button onClick={onEventOpen(event)}>View</Button>
+          <Button onClick={deleteEvent(event.id)}>Delete</Button>
         </Stack>
         {/* <Stack
           align={{ base: "center", md: "stretch" }}
-          textAlign={{ base: "center", md: "left" }}
+          textAlign={{ base: "center", md:  "left" }}
           mt={{ base: 4, md: 0 }}
           ml={{ md: 6 }}
         >
