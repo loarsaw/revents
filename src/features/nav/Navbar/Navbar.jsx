@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Flex,
@@ -14,7 +15,12 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useDisclosure,
+  Spacer,
 } from "@chakra-ui/react";
+import SignedInMenu from "../menus/SignedInMenu";
+
+import SignedOutMenu from "../menus/SignedOutMenu";
+import { NavLink, Link as NLink } from "react-router-dom";
 import {
   HamburgerIcon,
   CloseIcon,
@@ -24,6 +30,7 @@ import {
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
+  const [authenticated, setAuthenticated] = useState(false);
 
   return (
     <Box>
@@ -57,44 +64,32 @@ export default function WithSubnavigation() {
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
+            as={NavLink}
+            to="/"
           >
-            Logo
+            Re-vents
           </Text>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
-            <DesktopNav />
+            <DesktopNav authenticated={authenticated} />
           </Flex>
+
+          {/* <Text
+            textAlign={useBreakpointValue({ base: "center", md: "left" })}
+            fontFamily={"heading"}
+            color={useColorModeValue("gray.800", "white")}
+            as={NLink}
+            to="/createEvent"
+          >
+            Create Event
+          </Text> */}
         </Flex>
 
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify={"flex-end"}
-          direction={"row"}
-          spacing={6}
-        >
-          <Button
-            as={"a"}
-            fontSize={"sm"}
-            fontWeight={400}
-            variant={"link"}
-            href={"#"}
-          >
-            Sign In
-          </Button>
-          <Button
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"pink.400"}
-            href={"#"}
-            _hover={{
-              bg: "pink.300",
-            }}
-          >
-            Sign Up
-          </Button>
-        </Stack>
+        {authenticated ? (
+          <SignedInMenu setAuth={setAuthenticated} />
+        ) : (
+          <SignedOutMenu setAuth={setAuthenticated} />
+        )}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -104,7 +99,7 @@ export default function WithSubnavigation() {
   );
 }
 
-const DesktopNav = () => {
+const DesktopNav = ({ authenticated }) => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
@@ -116,8 +111,9 @@ const DesktopNav = () => {
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
               <Link
+                as={NavLink}
                 p={2}
-                href={navItem.href ?? "#"}
+                to={navItem.href}
                 fontSize={"sm"}
                 fontWeight={500}
                 color={linkColor}
@@ -126,7 +122,11 @@ const DesktopNav = () => {
                   color: linkHoverColor,
                 }}
               >
-                {navItem.label}
+                {authenticated
+                  ? navItem.label
+                  : navItem.isPublic
+                  ? navItem.label
+                  : null}
               </Link>
             </PopoverTrigger>
 
@@ -258,42 +258,44 @@ const MobileNavItem = ({ label, children, href }) => {
 };
 
 const NAV_ITEMS = [
+  // {
+  //   label: "Inspiration",
+  //   children: [
+  //     {
+  //       label: "Explore Design Work",
+  //       subLabel: "Trending Design to inspire you",
+  //       href: "#",
+  //     },
+  //     {
+  //       label: "New & Noteworthy",
+  //       subLabel: "Up-and-coming Designers",
+  //       href: "#",
+  //     },
+  //   ],
+  // },
+  // {
+  //   label: "Find Work",
+  //   children: [
+  //     {
+  //       label: "Job Board",
+  //       subLabel: "Find your dream design job",
+  //       href: "#",
+  //     },
+  //     {
+  //       label: "Freelance Projects",
+  //       subLabel: "An exclusive list for contract work",
+  //       href: "#",
+  //     },
+  //   ],
+  // },
   {
-    label: "Inspiration",
-    children: [
-      {
-        label: "Explore Design Work",
-        subLabel: "Trending Design to inspire you",
-        href: "#",
-      },
-      {
-        label: "New & Noteworthy",
-        subLabel: "Up-and-coming Designers",
-        href: "#",
-      },
-    ],
+    label: "Events",
+    href: "/events",
+    isPublic: true,
   },
   {
-    label: "Find Work",
-    children: [
-      {
-        label: "Job Board",
-        subLabel: "Find your dream design job",
-        href: "#",
-      },
-      {
-        label: "Freelance Projects",
-        subLabel: "An exclusive list for contract work",
-        href: "#",
-      },
-    ],
-  },
-  {
-    label: "Learn Design",
-    href: "#",
-  },
-  {
-    label: "Hire Designers",
-    href: "#",
+    label: "People",
+    href: "/people",
+    isPublic: false,
   },
 ];
